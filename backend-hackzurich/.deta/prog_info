@@ -1,0 +1,1 @@
+{"id":"f1e0b2fa-9ecd-4b84-b357-02d694087894","space":4110,"runtime":"python3.9","name":"backend-hackzurich","path":"wptv1r","project":"a0x1jx6b","account":"144798365827","region":"eu-central-1","deps":["fastapi","deta"],"envs":null,"public":true,"log_level":"debug","cron":""}
