@@ -37,10 +37,10 @@ def login_user_by_email(email, password):
 def update_user_activities(user_id, activities):
     print(activities)
     activity_ids = []
-    for activity in activities:
-        activity_ids.append(activity["id"])
+    # for activity in activities:
+    #     activity_ids.append(activity["id"])
     # user = get_user_by_id(user_id)
-    users.update({"stored_activities": activity_ids}, user_id)
+    users.update({"stored_activities": activities}, user_id)
 
 
 def update_user_stats(user_id, new_stats):

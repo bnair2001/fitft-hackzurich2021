@@ -35,10 +35,10 @@ def update_operation(connection_id, operation):
         activities = get_activities(user_id)
         new_activities = []
         for activity in activities:
-            # print(activity)
+            # print(activity["id"])
             if activity["id"] not in existing_activities:
                 new_activities.append(activity)
-                existing_activities.append(activity["id"])
+                existing_activities.append(str(activity["id"]))
         if len(new_activities) > 0:
             update_user_activities(user_id, existing_activities)
             for activity in new_activities:
