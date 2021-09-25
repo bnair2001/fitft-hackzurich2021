@@ -1,8 +1,30 @@
+import 'dart:io';
+
+import 'package:FitFT/dashboard.dart';
+import 'package:FitFT/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_login/flutter_login.dart';
+import 'package:flutter_login/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
+Map<int, Color> color = {
+  50: const Color.fromRGBO(0, 0, 0, 1),
+  100: const Color.fromRGBO(0, 0, 0, 1),
+  200: const Color.fromRGBO(0, 0, 0, 1),
+  300: const Color.fromRGBO(0, 0, 0, 1),
+  400: const Color.fromRGBO(0, 0, 0, 1),
+  500: const Color.fromRGBO(0, 0, 0, 1),
+  600: const Color.fromRGBO(0, 0, 0, 1),
+  700: const Color.fromRGBO(0, 0, 0, 1),
+  800: const Color.fromRGBO(0, 0, 0, 1),
+  900: const Color.fromRGBO(0, 0, 0, 1),
+};
+
+MaterialColor myColor = MaterialColor(0xFF000000, color);
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -11,7 +33,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'FitFT',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -22,9 +44,13 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: myColor,
+        // ignore: deprecated_member_use
+        accentColor: Colors.white,
+        textSelectionTheme:
+            const TextSelectionThemeData(cursorColor: Colors.grey),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'FitFT'),
     );
   }
 }
@@ -61,6 +87,28 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _checkLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool('loggedIn') ?? false) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Dashboard()),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      );
+    }
+    // sleep(Duration(seconds: 5));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLogin();
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -70,11 +118,13 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
+      backgroundColor: Colors.black,
+      // appBar: AppBar(
+      //   // Here we take the value from the MyHomePage object that was created by
+      //   // the App.build method, and use it to set our appbar title.
+      //   title: Text(widget.title),
+      //   centerTitle: true,
+      // ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
@@ -94,22 +144,35 @@ class _MyHomePageState extends State<MyHomePage> {
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+          children: const <Widget>[
+            Text(
+              'FitFT',
+              style: TextStyle(
+                fontSize: 50,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              'Loading...',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
+            // Text(
+            //   '$_counter',
+            //   style: Theme.of(context).textTheme.headline4,
+            // ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _incrementCounter,
+      //   tooltip: 'Increment',
+      //   child: const Icon(Icons.add),
+      // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
