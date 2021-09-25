@@ -14,7 +14,7 @@ var app = new Vue({
         username: '',
         showUser: false,
         timer: null,
-        showQR: true,
+        showQR: false,
         connectionStatus: '',
         nft: {
             id: '',
@@ -37,26 +37,29 @@ var app = new Vue({
         //     colorLight: "#ffffff",
         //     correctLevel: QRCode.CorrectLevel.H
         // });
-        self.showQR = false;
+        // self.showQR = false;
         //FIX LATER
-        let athleteId = 0;
-        // window.web3 = await Moralis.Web3.enable();
-        const web3 = await Moralis.enable();
-        let abi = await self.getAbi();
-        // let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS)
-        console.log(abi);
-        const contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
-        console.log(contract);
-        let data = await contract.methods.getTokenDetails(athleteId).call({ from: ethereum.selectedAddress });
-        console.log(data);
-        self.nft.id = data["id"];
-        self.nft.caloriesBurned = data["caloriesBurned"];
-        self.nft.weight = data["weight"];
-        self.nft.height = data["height"];
-        self.nft.distanceTravelled = data["distanceTravelled"];
-        self.nft.lastStreak = data["lastStreak"];
-        console.log(self.nft);
-        console.log("hello");
+        // let athleteId = 0;
+        // // window.web3 = await Moralis.Web3.enable();
+        // const web3 = await Moralis.enable();
+        // let abi = await self.getAbi();
+        // // let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS)
+        // console.log(abi);
+        // const contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+        // console.log(contract);
+        // let data = await contract.methods.getTokenDetails(athleteId).call({ from: ethereum.selectedAddress });
+        // console.log(data);
+        // self.nft.id = data["id"];
+        // self.nft.caloriesBurned = data["caloriesBurned"];
+        // self.nft.weight = data["weight"];
+        // self.nft.height = data["height"];
+        // self.nft.distanceTravelled = data["distanceTravelled"];
+        // self.nft.lastStreak = data["lastStreak"];
+        // console.log(self.nft);
+        // console.log("hello");
+
+        await self.getNFTDeets();
+
         try {
             // check if user is logged in
             if (ethereum.selectedAddress) {
@@ -136,6 +139,31 @@ var app = new Vue({
                 console.log(error);
             }
         },
+        getNFTDeets: async function () {
+            var self = this;
+            try {
+                let athleteId = 0;
+                // window.web3 = await Moralis.Web3.enable();
+                const web3 = await Moralis.enable();
+                let abi = await self.getAbi();
+                // let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS)
+                console.log(abi);
+                const contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+                console.log(contract);
+                let data = await contract.methods.getTokenDetails(athleteId).call({ from: ethereum.selectedAddress });
+                console.log(data);
+                self.nft.id = data["id"];
+                self.nft.caloriesBurned = data["caloriesBurned"];
+                self.nft.weight = data["weight"];
+                self.nft.height = data["height"];
+                self.nft.distanceTravelled = data["distanceTravelled"];
+                self.nft.lastStreak = data["lastStreak"];
+                console.log(self.nft);
+                console.log("hello");
+            } catch (error) {
+                console.log(error);
+            }
+        },
         getAbi: function () {
             return new Promise((resolve, reject) => {
                 axios({
@@ -158,6 +186,9 @@ var app = new Vue({
                 console.log(response);
                 // console.log(response.data.connected);
                 self.connectionStatus = response.data.state;
+                // if (response.data.state != "idle") {
+                //     await self.getNFTDeets();
+                // }
                 if (response.data.connected == false) {
                     // self.notloggedIn = true;
                     self.showQR = true;
@@ -168,6 +199,15 @@ var app = new Vue({
                 }
             });
             console.log(self.showQR);
+        },
+
+        updateWorkout: function (athleteId, caloriesBurned, distanceTravelled) {
+            let abi = this.getAbi();
+            let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+            contract.methods.workout(athleteId, caloriesBurned, distanceTravelled).send({ from: ethereum.selectedAddress }).on("reciept", (() => {
+                console.log("workout updated");
+            }));
+
         }
     },
 
