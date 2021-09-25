@@ -11,9 +11,10 @@ def create_new_user(name, email, password):
     return user
 
 def login_user_by_email(email, password):
-    user = users.get({"email": email})
-    if user == None:
+    user = users.fetch({"email": email})
+    print(user.items)
+    if user.items == []:
         return None
-    if user["password"] == password:
-        return user
+    if user.items[0]["password"] == password:
+        return user.items[0]
     return None
