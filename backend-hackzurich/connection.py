@@ -15,9 +15,15 @@ def get_connection(conn_id):
 
 
 def establish_connection(conn_id, user):
-    conn = connections.update(conn_id, {
+    conn = connections.update({
         "state": "idle",
         "connected": True,
         "user": user
-    })
+    },conn_id)
+    return conn
+
+def update_connection(conn_id, state):
+    conn = connections.update({
+        "state": state
+    },conn_id)
     return conn

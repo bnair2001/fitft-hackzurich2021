@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from models import *
 from users import *
 from connection import *
+from fitnessFunctions import *
 app = FastAPI()
 
 
@@ -15,8 +16,9 @@ def create_user(item: User):
     name = item.name
     email = item.email
     password = item.password
-
-    usr = create_new_user(name, email, password)
+    weight = item.weight
+    height = item.height
+    usr = create_new_user(name, email, password, weight, height)
     return usr
 
 
@@ -53,6 +55,28 @@ def connect_to_connection(item: Connection):
         return {"error": "user id is empty"}
     conn = get_connection(connection_id)
     if conn:
-        return establish_connection(user_id, connection_id)
+        return establish_connection(connection_id, user_id)
+    else:
+        return {"error": "connection id is invalid"}
+
+@app.get('/connection/{connection_id}')
+def get_conn(connection_id: str):
+    conn = get_connection(connection_id)
+    if conn:
+        return conn
+    else:
+        return {"error": "connection id is invalid"}
+
+@app.post('/connection/operation')
+def operation_on_connection(item: Connection):
+    connection_id = item.connection_id
+    operation = item.operation
+    if connection_id == "":
+        return {"error": "connection id is empty"}
+    if operation == "":
+        return {"error": "operation is empty"}
+    conn = get_connection(connection_id)
+    if conn:
+        return update_operation(connection_id, operation)
     else:
         return {"error": "connection id is invalid"}

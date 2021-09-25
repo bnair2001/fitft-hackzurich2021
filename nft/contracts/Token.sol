@@ -36,8 +36,8 @@ contract Token is ERC721, Ownable {
     Athlete storage athlete = _athleteDetails[tokenId];
     // require(msg.sender == athlete.owner);
     athlete.id = 0;
-    athlete.caloriesBurned += burned;
-    athlete.distanceTravelled += distance;
+    athlete.caloriesBurned = burned;
+    athlete.distanceTravelled = distance;
     athlete.lastStreak = block.timestamp;
   }
 }
