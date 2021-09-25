@@ -30,12 +30,13 @@
         </div>
         <div class="container">
             <h2>{{ message }}</h2>
+            <br>
             <div id="qrcode" v-if="showQR">
                 <img :src="qrCurrent" />
             </div>
-            <h3 v-if="!showQR">Connected to the Mobile app</h2>
+            <h2 v-if="!showQR">Connected to the Mobile app</h2>
                 <br>
-                <!-- <h2 v-if="showUser">{{username}} 's NFT</h2> -->
+                <h3 v-if="!showQR">Status: <b>{{connectionStatus}}</b></h3>
                 <button id="login_button" v-on:click="login" v-if="notloggedIn">Sign in with MetaMask</button>
                 <br>
                 <div id="nft-info" v-if="!notloggedIn">

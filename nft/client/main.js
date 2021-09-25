@@ -15,6 +15,7 @@ var app = new Vue({
         showUser: false,
         timer: null,
         showQR: true,
+        connectionStatus: '',
         nft: {
             id: '',
             caloriesBurned: '',
@@ -109,7 +110,7 @@ var app = new Vue({
             // window.location.reload();
             self.timer = setInterval(() => {
                 self.checkConnection()
-            }, 3000)
+            }, 2000)
         } else {
             self.notloggedIn = true;
         }
@@ -156,6 +157,7 @@ var app = new Vue({
             }).then(function (response) {
                 console.log(response);
                 // console.log(response.data.connected);
+                self.connectionStatus = response.data.state;
                 if (response.data.connected == false) {
                     // self.notloggedIn = true;
                     self.showQR = true;
