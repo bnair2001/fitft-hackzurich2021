@@ -26,10 +26,17 @@ var app = new Vue({
             distanceTravelled: '',
             lastStreak: ''
         },
+        nft1: {
+
+        },
+        nft2: {
+            
+        }
     },
     mounted: async function () {
         // debugger;
-        console.log(evolve("056700003412008400", "080000001812004708"))
+        console.log(evolve("000000000000000018", "000000000000000008"))
+        console.log(breed("000000000000000018", "000000000000000008"))
 
         var self = this;
         await self.getNFTDeets();
@@ -80,6 +87,8 @@ var app = new Vue({
         } else {
             self.notloggedIn = true;
         }
+
+
     },
     methods: {
         login: async function () {
@@ -143,7 +152,7 @@ var app = new Vue({
 
                 axios({
                     method: 'post',
-                    url: 'https://wptv1r.deta.dev/connection/new',
+                    url: 'https://wptv1r.deta.dev/connection/operation',
                     responseType: 'json',
                     data: {
                         "connection_id": localStorage.getItem("key"),
@@ -152,20 +161,27 @@ var app = new Vue({
                     }
                 }).then(function (response) {
                     console.log(response);
+                    // self.updateWorkout(0, response.data.artID, response.data.caloriesBurned, response.data.distanceTravelled);
+                    self.nft.id = response.data.artID;
+                    self.nft.caloriesBurned = response.data.caloriesBurned;
+                    self.nft.weight = response.data.weight;
+                    self.nft.height = response.data.height;
+                    self.nft.distanceTravelled = response.data.distanceTravelled;
+                    // self.getNFTDeets();
                     // const goals = [2000, 2000, 3000, 3000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000]
-                    if (response.data.nft - block == 0 || response.data.nft - block == 1) {
+                    if (response.data.nft_block == 0 || response.data.nft_block == 1) {
                         if (response.data.caloriesBurned > 2000 || response.data.caloriesBurned > 4000) {
                             self.updateMessage = "You are eligible to breed!"
                             self.breedEligible = true;
                         }
                     }
-                    else if (response.data.nft - block == 2 || response.data.nft - block == 3) {
+                    else if (response.data.nft_block == 2 || response.data.nft_block == 3) {
                         if (response.data.caloriesBurned > 3000 || response.data.caloriesBurned > 4000) {
                             self.updateMessage = "You are eligible to breed!"
                             self.breedEligible = true;
                         }
                     }
-                    else if (response.data.nft - block > 4 && response.data.nft - block < 20) {
+                    else if (response.data.nft_block > 4 && response.data.nft_block < 20) {
                         if (response.data.caloriesBurned > 4000 && response.data.caloriesBurned % 4000 == 0) {
                             self.updateMessage = "You are eligible to breed!"
                             self.breedEligible = true;
@@ -206,9 +222,23 @@ var app = new Vue({
                 console.log(response);
                 // console.log(response.data.connected);
                 self.connectionStatus = response.data.state;
+                console.log(response.data)
+                if (response.data.user != "") {
+                    localStorage.setItem("user_id", response.data.user);
+                }
+                axios({
+                    method: 'get',
+                    url: 'https://wptv1r.deta.dev/users/' + localStorage.getItem("user_id"),
+                    responseType: 'json',
+                }).then(function (response) {
+                    console.log(response.data);
+                    this.nft1 = response.data
+                });
                 if (response.data.state != "idle") {
                     //here
                     // await self.getNFTDeets();
+
+
                     self.initiateUpdate(response.data.user);
                 }
                 if (response.data.connected == false) {
@@ -223,12 +253,12 @@ var app = new Vue({
             console.log(self.showQR);
         },
 
-        updateWorkout: function (athleteId, caloriesBurned, distanceTravelled) {
+        updateWorkout: function (athleteId, id, caloriesBurned, distanceTravelled) {
             let abi = this.getAbi();
             let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
-            contract.methods.workout(athleteId, caloriesBurned, distanceTravelled).send({ from: ethereum.selectedAddress }).on("reciept", (() => {
+            contract.methods.workout(athleteId, id, caloriesBurned, distanceTravelled).send({ from: ethereum.selectedAddress }).on("reciept", (() => {
                 console.log("workout updated");
-            }));
+            }));å
 
         }
     },

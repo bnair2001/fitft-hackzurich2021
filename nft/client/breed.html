@@ -35,31 +35,28 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <label for="name">Breed With:</label>
                                         <input type="text" class="form-control" id="name" placeholder="Enter User Id">
                                         <br>
                                         <button class="btn btn-primary" @click="fetch_user1">Fetch</button>
-                                    </div>
+                                    </div> -->
+                                    <h2>Evolved Parents</h2>
                                 </div>
                                 <hr>
+                                
                                 <div class="col">
-                                    <!-- Show 2 images side by side with a breed button below -->
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="card">
                                                 <div class="row">
                                                     <img width="300" height="300"
-                                                        src="https://fitft-111.herokuapp.com/generated/000000000000000008.png" />
+                                                        src="https://fitft-111.herokuapp.com/generated/000000000000180018.png" />
 
                                                 </div>
                                                 <div class="card-body">
-                                                    <div class="row">
-
-                                                    </div>
-                                                    <p>Calories Burned: {{calsBnt}}</p>
-                                                    <p>Distance Travelled: {{dist}}</p>
-                                                    <p>Stage: {{stage}}</p>
+                                                    <p>Calories Burned: 4568</p>
+                                                    <p>Distance Travelled: 20</p>
                                                 </div>
                                             </div>
 
@@ -68,31 +65,47 @@
                                             <div class="card">
                                                 <div class="row">
                                                     <img width="300" height="300"
-                                                        src="https://fitft-111.herokuapp.com/generated/000000000000000008.png" />
+                                                        src="https://fitft-111.herokuapp.com/generated/000000000000001808.png" />
 
                                                 </div>
                                                 <div class="card-body">
-                                                   
-                                                        <p>Calories Burned: {{calsBnt1}}</p>
-                                                        <p>Distance Travelled: {{dist1}}</p>
-                                                        <p>Stage: {{stage1}}</p>
+                                                    <p>Calories Burned: 2500</p>
+                                                    <p>Distance Travelled: 5</p>
                                                 </div>
                                             </div>
 
                                         </div>
                                     </div>
                                     <br>
-                                    <button type="button" class="btn btn-primary btn-block" @click="breed">Breed</button>
+                                    <button type="button" class="btn btn-primary btn-block disabled"
+                                        @click="breed">Breed</button>
 
                                 </div>
+
                             </div>
+
+                        </div>
+                        <h2>Child: </h2>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="row">
+                                    <img width="300" height="300"
+                                        src="https://fitft-111.herokuapp.com/generated/000000000000000008.png" />
+                                </div>
+                                <div class="card-body">
+                                    <p>Calories Burned: 0</p>
+                                    <p>Distance Travelled: 0</p>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <script type="text/javascript" src="breed.js"></script>
-        <script type="text/javascript" src="main.js"></script>
+    </div>
+    <script type="text/javascript" src="breed.js"></script>
+    <script type="text/javascript" src="main.js"></script>
 </body>
 
 </html>

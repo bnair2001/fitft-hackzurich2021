@@ -29,39 +29,45 @@
             </div>
         </div>
         <div class="container">
-            <h2>{{ message }}</h2>
+            <!-- <h2>{{ message }}</h2> -->
             <br>
             <div id="qrcode" v-if="showQR">
                 <img :src="qrCurrent" />
             </div>
             <h2 v-if="!showQR">Connected to the Mobile app</h2>
-                <br>
-                <h3 v-if="!showQR">Status: <b>{{connectionStatus}}</b></h3>
-                <button id="login_button" v-on:click="login" v-if="notloggedIn">Sign in with MetaMask</button>
-                <br>
-                <div id="nft-info" v-if="!notloggedIn">
-                    <ul>
-                        <li>
-                            <p>Id: {{ nft.id }}</p>
-                        </li>
-                        <li>
-                            <p>Calories Burned: {{ nft.caloriesBurned }}</p>
-                        </li>
-                        <li>
-                            <p>Weight: {{ nft.weight }}</p>
-                        </li>
-                        <li>
-                            <p>Height: {{ nft.height }}</p>
-                        </li>
-                        <li>
-                            <p>Distance Travelled: {{ nft.distanceTravelled }}</p>
-                        </li>
-                        <li>
-                            <p>Last Updated: {{ nft.lastStreak }}</p>
-                        </li>
+            <br>
+            <h3 v-if="!showQR">Status: <b>{{connectionStatus}}</b></h3>
+            <button id="login_button" v-on:click="login" v-if="notloggedIn">Sign in with MetaMask</button>
+            <br>
+            <div id="nft-info" v-if="!notloggedIn">
+                <ul>
+                    <li>
+                        <p>Id: {{ nft.id }}</p>
+                    </li>
+                    <li>
+                        <p>Calories Burned: {{ nft.caloriesBurned }}</p>
+                    </li>
+                    <li>
+                        <p>Weight: {{ nft.weight }}</p>
+                    </li>
+                    <li>
+                        <p>Height: {{ nft.height }}</p>
+                    </li>
+                    <li>
+                        <p>Distance Travelled: {{ nft.distanceTravelled }}</p>
+                    </li>
+                    <!-- <li>
+                        <p>Last Updated: {{ nft.lastStreak }}</p>
+                    </li> -->
 
-                    </ul>
-                </div>
+                </ul>
+            </div>
+
+            <div v-if="breedEligible">
+                <h3>{{updateMessage}}</h3>
+                <button id="update_button" v-on:click="update">Breed</button>
+            </div>
+            
         </div>
     </div>
     <script type="text/javascript" src="breed.js"></script>

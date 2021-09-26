@@ -49,5 +49,7 @@ def update_operation(connection_id, operation):
                 if activity["distance"] != None:
                     new_stats["distanceTravelled"] = new_stats["distanceTravelled"] + int(float((activity["distance"])))
             update_user_stats(user_id, new_stats)
-    update_connection(connection_id, "idle")
+        update_connection(connection_id, "idle")
+    else:
+        update_connection(connection_id, operation)
     return get_user_by_id(user_id)

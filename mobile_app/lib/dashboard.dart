@@ -98,7 +98,9 @@ class _DashboardState extends State<Dashboard> {
                       buttons: [
                         DialogButton(
                           color: Colors.black,
-                          onPressed: () => _sendUpdateSignal,
+                          onPressed: () {
+                            _sendUpdateSignal();
+                          },
                           child: const Text(
                             "Update",
                             style: TextStyle(color: Colors.white, fontSize: 20),
@@ -156,7 +158,7 @@ class _DashboardState extends State<Dashboard> {
                     color: Colors.white, fontSize: 20, fontFamily: 'Roboto')),
             const SizedBox(height: 20),
             Image.network(
-              'https://fitft-111.herokuapp.com/generated/080000001812004708.png',
+              'https://fitft-111.herokuapp.com/generated/000000000000180018.png',
               fit: BoxFit.contain,
               width: 280,
               height: 280,
