@@ -12,6 +12,9 @@ contract Token is ERC721, Ownable {
     uint256 height;
     uint256 distanceTravelled;
     uint256 lastStreak;
+    uint256 stage;
+    uint256 parentOne;
+    uint256 parentTwo;
   }
 
   uint nextId = 0;
@@ -26,18 +29,19 @@ contract Token is ERC721, Ownable {
     return _athleteDetails[tokenId];
   }
 
-  function mint(uint id, uint256 caloriesBurned, uint256 weight, uint256 height, uint256 distanceTravelled, uint256 lastStreak) public onlyOwner {
-    _athleteDetails[nextId] = Athlete(id, caloriesBurned, weight, height, distanceTravelled, lastStreak);
+  function mint(uint256 id, uint256 caloriesBurned, uint256 weight, uint256 height, uint256 distanceTravelled, uint256 lastStreak, uint256 stage, uint256 p1, uint256 p2) public onlyOwner {
+    _athleteDetails[nextId] = Athlete(id, caloriesBurned, weight, height, distanceTravelled, lastStreak, stage, p1, p2);
     _safeMint(msg.sender, nextId);
     nextId++;
   }
 
-  function workout(uint256 tokenId, uint burned, uint distance) public {
+  function workout(uint256 tokenId, uint256 id, uint burned, uint distance) public {
     Athlete storage athlete = _athleteDetails[tokenId];
-    // require(msg.sender == athlete.owner);
-    athlete.id = 0;
+    require(athlete.stage <= 20);
+    athlete.id = id;
     athlete.caloriesBurned = burned;
     athlete.distanceTravelled = distance;
+    athlete.stage = athlete.stage + 1;
     athlete.lastStreak = block.timestamp;
   }
 }

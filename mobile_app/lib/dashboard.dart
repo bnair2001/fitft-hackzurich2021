@@ -31,6 +31,22 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
+  void _sendUpdateSignal() async {
+    final prefs = await SharedPreferences.getInstance();
+    Map data = {
+      'connection_id': prefs.getString('conn_key') ?? "",
+      'user_id': user_id,
+      'operation': 'update'
+    };
+    var body = json.encode(data);
+    var response = await http.post(
+      Uri.parse("https://wptv1r.deta.dev/connection/operation"),
+      headers: {"Content-Type": "application/json"},
+      body: body,
+    );
+    print(response.body);
+  }
+
   @override
   void initState() {
     _getUserData();
@@ -53,7 +69,9 @@ class _DashboardState extends State<Dashboard> {
               // Navigator.pushReplacementNamed(context, '/login');
               String? cameraScanResult = await scanner.scan();
               print(cameraScanResult);
+              SharedPreferences prefs = await SharedPreferences.getInstance();
               if (cameraScanResult != null) {
+                prefs.setString('conn_key', cameraScanResult);
                 Map data = {
                   'connection_id': cameraScanResult,
                   'user_id': user_id,
@@ -80,7 +98,7 @@ class _DashboardState extends State<Dashboard> {
                       buttons: [
                         DialogButton(
                           color: Colors.black,
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () => _sendUpdateSignal,
                           child: const Text(
                             "Update",
                             style: TextStyle(color: Colors.white, fontSize: 20),

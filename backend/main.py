@@ -40,6 +40,14 @@ def login_user(item: User):
     else:
         return {"error": "invalid email or password"}
 
+@app.get('/users/{user_id}')
+def get_user(user_id: str):
+    usr = get_user_by_id(user_id)
+    if usr:
+        return usr
+    else:
+        return {"error": "user not found"}
+
 
 @app.post('/connection/new')
 def new_connection(item: Connection):

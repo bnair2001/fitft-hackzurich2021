@@ -12,6 +12,8 @@ def create_new_user(name, email, password, weight, height):
         "height": height,
         "distanceTravelled": 0,
         "stored_activities": [],
+        "artID": "",
+        "nft-block": "",
         "assets": []
     })
     return user

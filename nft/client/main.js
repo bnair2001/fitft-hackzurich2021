@@ -1,6 +1,6 @@
 Moralis.initialize("0OAnK3Quiro9e7Q5qm8WWz7OAbY3n5T0Mx07V0Lv"); // Application id from moralis.io
 Moralis.serverURL = "https://rke9wdovzebi.moralishost.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x9F665A4dD040842602468d5DdDFB983C7aFCf22f";
+const CONTRACT_ADDRESS = "0x61AFF83Db495548999DcFd3111C31175282B9238";
 
 var app = new Vue({
     el: '#app',
@@ -12,6 +12,8 @@ var app = new Vue({
         qrBaseUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=',
         qrCurrent: '',
         username: '',
+        updateMessage: '',
+        breedEligible: false,
         showUser: false,
         timer: null,
         showQR: false,
@@ -27,37 +29,9 @@ var app = new Vue({
     },
     mounted: async function () {
         // debugger;
-        var self = this;
-        // self.showQR = true;
-        // self.qrcode = new QRCode("qrcode", {
-        //     text: this.qrText,
-        //     width: 128,
-        //     height: 128,
-        //     colorDark: "#000000",
-        //     colorLight: "#ffffff",
-        //     correctLevel: QRCode.CorrectLevel.H
-        // });
-        // self.showQR = false;
-        //FIX LATER
-        // let athleteId = 0;
-        // // window.web3 = await Moralis.Web3.enable();
-        // const web3 = await Moralis.enable();
-        // let abi = await self.getAbi();
-        // // let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS)
-        // console.log(abi);
-        // const contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
-        // console.log(contract);
-        // let data = await contract.methods.getTokenDetails(athleteId).call({ from: ethereum.selectedAddress });
-        // console.log(data);
-        // self.nft.id = data["id"];
-        // self.nft.caloriesBurned = data["caloriesBurned"];
-        // self.nft.weight = data["weight"];
-        // self.nft.height = data["height"];
-        // self.nft.distanceTravelled = data["distanceTravelled"];
-        // self.nft.lastStreak = data["lastStreak"];
-        // console.log(self.nft);
-        // console.log("hello");
+        console.log(evolve("056700003412008400", "080000001812004708"))
 
+        var self = this;
         await self.getNFTDeets();
 
         try {
@@ -73,17 +47,6 @@ var app = new Vue({
                 self.showQR = false;
             }
 
-            // currentUser = Moralis.User.current();
-            // if (!currentUser) {
-            //     self.notloggedIn = true;
-            //     self.showQR = false;
-            //     console.log("User not logged in");
-            // }
-            // else {
-            //     console.log("User already logged in");
-            //     self.notloggedIn = false;
-            //     self.showQR = true;
-            // }
         } catch (error) {
             console.log(error);
         }
@@ -164,6 +127,63 @@ var app = new Vue({
                 console.log(error);
             }
         },
+        initiateUpdate: async function (userId) {
+            var self = this;
+            try {
+                let athleteId = 0;
+                // window.web3 = await Moralis.Web3.enable();
+                const web3 = await Moralis.enable();
+                let abi = await self.getAbi();
+                // let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS)
+                console.log(abi);
+                const contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+                console.log(contract);
+                let data = await contract.methods.getTokenDetails(athleteId).call({ from: ethereum.selectedAddress });
+                console.log(data);
+
+                axios({
+                    method: 'post',
+                    url: 'https://wptv1r.deta.dev/connection/new',
+                    responseType: 'json',
+                    data: {
+                        "connection_id": localStorage.getItem("key"),
+                        "user_id": userId,
+                        "operation": "update_fitness_activities"
+                    }
+                }).then(function (response) {
+                    console.log(response);
+                    // const goals = [2000, 2000, 3000, 3000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000]
+                    if (response.data.nft - block == 0 || response.data.nft - block == 1) {
+                        if (response.data.caloriesBurned > 2000 || response.data.caloriesBurned > 4000) {
+                            self.updateMessage = "You are eligible to breed!"
+                            self.breedEligible = true;
+                        }
+                    }
+                    else if (response.data.nft - block == 2 || response.data.nft - block == 3) {
+                        if (response.data.caloriesBurned > 3000 || response.data.caloriesBurned > 4000) {
+                            self.updateMessage = "You are eligible to breed!"
+                            self.breedEligible = true;
+                        }
+                    }
+                    else if (response.data.nft - block > 4 && response.data.nft - block < 20) {
+                        if (response.data.caloriesBurned > 4000 && response.data.caloriesBurned % 4000 == 0) {
+                            self.updateMessage = "You are eligible to breed!"
+                            self.breedEligible = true;
+                        }
+                    }
+                    else {
+                        self.updateMessage = "You are not eligible to breed."
+                        self.breedEligible = false;
+                    }
+
+                }
+
+                )
+            } catch (error) {
+                console.log(error);
+            }
+
+        },
         getAbi: function () {
             return new Promise((resolve, reject) => {
                 axios({
@@ -186,9 +206,11 @@ var app = new Vue({
                 console.log(response);
                 // console.log(response.data.connected);
                 self.connectionStatus = response.data.state;
-                // if (response.data.state != "idle") {
-                //     await self.getNFTDeets();
-                // }
+                if (response.data.state != "idle") {
+                    //here
+                    // await self.getNFTDeets();
+                    self.initiateUpdate(response.data.user);
+                }
                 if (response.data.connected == false) {
                     // self.notloggedIn = true;
                     self.showQR = true;

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Breed</title>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/moralis/dist/moralis.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script src="qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div id="app">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-4">Breed</h1>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="name">Breed With:</label>
+                                        <input type="text" class="form-control" id="name" placeholder="Enter User Id">
+                                        <br>
+                                        <button class="btn btn-primary" @click="fetch_user1">Fetch</button>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="col">
+                                    <!-- Show 2 images side by side with a breed button below -->
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <div class="row">
+                                                    <img width="300" height="300"
+                                                        src="https://fitft-111.herokuapp.com/generated/000000000000000008.png" />
+
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row">
+
+                                                    </div>
+                                                    <p>Calories Burned: {{calsBnt}}</p>
+                                                    <p>Distance Travelled: {{dist}}</p>
+                                                    <p>Stage: {{stage}}</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <div class="row">
+                                                    <img width="300" height="300"
+                                                        src="https://fitft-111.herokuapp.com/generated/000000000000000008.png" />
+
+                                                </div>
+                                                <div class="card-body">
+                                                   
+                                                        <p>Calories Burned: {{calsBnt1}}</p>
+                                                        <p>Distance Travelled: {{dist1}}</p>
+                                                        <p>Stage: {{stage1}}</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <button type="button" class="btn btn-primary btn-block" @click="breed">Breed</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="breed.js"></script>
+        <script type="text/javascript" src="main.js"></script>
+</body>
+
+</html>
